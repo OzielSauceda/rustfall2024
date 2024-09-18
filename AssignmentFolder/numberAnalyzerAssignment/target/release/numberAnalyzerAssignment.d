@@ -1,0 +1,1 @@
+/workspaces/rustfall2024/numberAnalyzerAssignment/target/release/numberAnalyzerAssignment: /workspaces/rustfall2024/numberAnalyzerAssignment/src/main.rs
