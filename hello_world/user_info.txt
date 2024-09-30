@@ -1,0 +1,2 @@
+Car: Toyota
+Model: 2024
