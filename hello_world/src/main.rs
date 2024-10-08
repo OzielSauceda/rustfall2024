@@ -1,46 +1,56 @@
-use std::fs::File;
-use std::io::{self, Read, Write};
+#[derive(Debug)]
+enum GradeLevel {
+    Bachelor,
+    Masters,
+    PhD,
+}
+#[derive(Debug)]
 
-struct Car {
-    name: String,
-    model: u32,
+enum Major{
+    CS,
+    Electrical,
+}
+#[derive(Debug)]
+
+struct Student{
+    name:String,
+    grade: GradeLevel,
+    major: Major,
 }
 
-fn reading_from_console() -> Car{
-    let mut buffer = String::new();
+impl Student {
+    fn new(name:String, grade:GradeLevel, major:Major) -> Self{
+        Student {
+            name: name,
+            grade: grade,
+            major:major,
+        }
+    }
 
-    print!("What's your car? ");
-    io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut buffer).unwrap();
-    let name = buffer.trim().to_string();
-    buffer.clear();
+    fn intro(&self){
+        println!("My name is: {}", self.name);
+        match self.grade{
+            GradeLevel::Bachelor => println!("\nMy classification level is Bachelors"),
+            GradeLevel::Masters => println!("\nMy classification level is Masters"),
+            GradeLevel::PhD => println!("\nMy classification level is PhD"),
+        }
+        
+        match self.major{
+            Major::CS => println!("\nMy major is Computer Science"),
+            Major::Electrical => println!("\nMy major is Electrical Engineering"),
+        }
 
-    print!("What model is it? ");
-    io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut buffer).unwrap();
-    let model: u32 = buffer.trim().parse().expect("Please enter a valid model.");
 
-    Car { name, model }
-}
-
-fn save_to_file(car: &Car){
-    let mut file = File::create("user_info.txt").unwrap();
-    writeln!(file, "Car: {}", car.name).unwrap();
-    writeln!(file, "Model: {}", car.model).unwrap();
-}
-
-fn read_from_file(){
-    let mut file = File::open("user_info.txt").unwrap();
-    let mut content = String::new();
-    file.read_to_string(&mut content).unwrap();
-    println!("File content:\n{}", content);
+    }
 }
 
 fn main() {
-    let car = reading_from_console();
+    let s1= Student::new(
+        "John".to_string(),
+        GradeLevel::Bachelor, 
+        Major::CS
+    );
 
-    save_to_file(&car);
-    println!("Car information was saved to the file.");
+    s1.intro();
 
-    read_from_file();
 }
