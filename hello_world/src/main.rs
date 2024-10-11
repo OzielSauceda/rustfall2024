@@ -1,56 +1,55 @@
-#[derive(Debug)]
-enum GradeLevel {
-    Bachelor,
-    Masters,
-    PhD,
-}
-#[derive(Debug)]
+use std::fs::File;
+use std::io::{Write, BufReader, BufRead};
 
-enum Major{
-    CS,
-    Electrical,
-}
-#[derive(Debug)]
-
-struct Student{
-    name:String,
-    grade: GradeLevel,
-    major: Major,
+struct Book {
+    title: String,
+    author: String,
+    year: u16,
 }
 
-impl Student {
-    fn new(name:String, grade:GradeLevel, major:Major) -> Self{
-        Student {
-            name: name,
-            grade: grade,
-            major:major,
-        }
+fn save_books(books: &Vec<Book>, filename: &str) {
+    // TODO: Implement this function
+    // Hint: Use File::create() and write!() macro
+    let mut file = File::create(filename).unwrap();
+
+    for book in books {
+        writeln!(file, "{},{},{}", book.title, book.author, book.year);
     }
+}
 
-    fn intro(&self){
-        println!("My name is: {}", self.name);
-        match self.grade{
-            GradeLevel::Bachelor => println!("\nMy classification level is Bachelors"),
-            GradeLevel::Masters => println!("\nMy classification level is Masters"),
-            GradeLevel::PhD => println!("\nMy classification level is PhD"),
-        }
-        
-        match self.major{
-            Major::CS => println!("\nMy major is Computer Science"),
-            Major::Electrical => println!("\nMy major is Electrical Engineering"),
-        }
+fn load_books(filename: &str) -> Vec<Book> {
+    // TODO: Implement this function
+    // Hint: Use File::open() and BufReader
+    let mut totalBooks = Vec::new();
+    let file = File::open(filename).unwrap();
+    let readBook = BufReader::new(file);
 
+    for bookLine in readBook.lines() {
+        let book_info = bookLine.unwrap();
+        let partOfBook: Vec<&str> = book_info.split(',').collect();
+
+        totalBooks.push(Book{ 
+            title: partOfBook[0].to_string(),
+            author: partOfBook[1].to_string(),
+            year: partOfBook[2].parse().unwrap(),
+        });
 
     }
+    return totalBooks;
 }
 
 fn main() {
-    let s1= Student::new(
-        "John".to_string(),
-        GradeLevel::Bachelor, 
-        Major::CS
-    );
+    let books = vec![
+        Book { title: "1984".to_string(), author: "George Orwell".to_string(), year: 1949 },
+        Book { title: "To Kill a Mockingbird".to_string(), author: "Harper Lee".to_string(), year: 1960 },
+    ];
 
-    s1.intro();
+    save_books(&books, "books.txt");
+    println!("Books saved to file.");
 
+    let loaded_books = load_books("books.txt");
+    println!("Loaded books:");
+    for book in loaded_books {
+        println!("{} by {}, published in {}", book.title, book.author, book.year);
+    }
 }
