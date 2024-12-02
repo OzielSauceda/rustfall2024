@@ -246,3 +246,5 @@ Bitcoin: $98389.71
 Bitcoin: $98465.89
 Bitcoin: $98465.89
 Bitcoin: $98368.29
+Bitcoin: $98321.20
+Bitcoin: $98321.20
